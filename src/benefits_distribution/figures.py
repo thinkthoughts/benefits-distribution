@@ -13,7 +13,7 @@ def _save_figure(
     figure: plt.Figure,
     output_path: Path,
 ) -> Path:
-    """Save and display a generated figure."""
+    """Save, display, and close a generated figure."""
 
     output_path.parent.mkdir(
         parents=True,
@@ -53,7 +53,7 @@ def plot_engineering_grammar(
     context: RepositoryContext,
     output_path: Path,
 ) -> Path:
-    """Generate the shared engineering specification grammar."""
+    """Generate the shared specification grammar."""
 
     labels = context.grammar
 
@@ -114,7 +114,7 @@ def plot_engineering_grammar(
             )
 
     axis.set_title(
-        "Engineering Specification Grammar",
+        context.grammar_title,
         fontsize=18,
         fontweight="bold",
         pad=24,
@@ -123,10 +123,7 @@ def plot_engineering_grammar(
     axis.text(
         0.5,
         0.07,
-        (
-            "Engineering specifies objects before measuring variables, "
-            "and measures variables before evaluating indicators."
-        ),
+        context.design_principle,
         ha="center",
         va="center",
         fontsize=10.5,
@@ -162,8 +159,6 @@ def plot_repository_lane(
     )
     axis.axis("off")
 
-    # Wider exterior margins prevent the first and final boxes
-    # from touching the figure boundary.
     xs = np.linspace(
         0.11,
         0.89,
@@ -217,7 +212,6 @@ def plot_repository_lane(
         )
 
         if index < count - 1:
-            # Read naturally from left to right.
             axis.annotate(
                 "",
                 xy=(
@@ -267,7 +261,7 @@ def plot_construction_sequence(
     context: RepositoryContext,
     output_path: Path,
 ) -> Path:
-    """Generate the full notebook construction sequence."""
+    """Generate the repository notebook sequence."""
 
     sequence = context.construction_sequence
     count = len(sequence)
@@ -285,7 +279,6 @@ def plot_construction_sequence(
     )
     axis.axis("off")
 
-    # Leave enough room for complete first and last boxes.
     xs = np.linspace(
         0.055,
         0.945,
@@ -354,7 +347,6 @@ def plot_construction_sequence(
         )
 
         if index < count - 1:
-            # Arrows now point from 00 toward 43.
             axis.annotate(
                 "",
                 xy=(
@@ -378,7 +370,7 @@ def plot_construction_sequence(
             )
 
     axis.set_title(
-        "Repository Construction Sequence",
+        context.repository_sequence_title,
         fontsize=18,
         fontweight="bold",
         pad=24,
@@ -387,10 +379,7 @@ def plot_construction_sequence(
     axis.text(
         0.5,
         0.16,
-        (
-            "Each notebook specifies one connected stage "
-            "of repository development."
-        ),
+        context.repository_sequence_caption,
         ha="center",
         va="center",
         fontsize=10.5,
