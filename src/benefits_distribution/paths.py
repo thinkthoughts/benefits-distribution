@@ -1,13 +1,13 @@
 from pathlib import Path
 
 
-def find_repo_root() -> Path:
-    root = Path.cwd()
+def find_repo_root(start: str | Path | None = None) -> Path:
+    current = Path(start or Path.cwd()).resolve()
 
-    if root.name == "notebooks":
-        root = root.parent
+    if current.name == "notebooks":
+        return current.parent
 
-    return root
+    return current
 
 
 ROOT = find_repo_root()
