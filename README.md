@@ -8,6 +8,8 @@ It develops a connected engineering specification for modeling, measuring, and i
 
 > **Benefit Distribution Specifies Sustainable Development**
 
+<img src="figures/benefits-distribution-repo.png" />
+
 ## Engineering grammar
 
 ```
