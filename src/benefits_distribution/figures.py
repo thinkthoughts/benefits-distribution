@@ -89,11 +89,7 @@ def plot_engineering_grammar(
             ha="center",
             va="center",
             fontsize=13,
-            fontweight=(
-                "bold"
-                if index < 4
-                else "normal"
-            ),
+            fontweight="bold",
         )
 
         if index < len(labels) - 1:
@@ -143,11 +139,24 @@ def plot_repository_lane(
 
     symbols = context.lane_symbols
     labels = context.lane_labels
+    relationships = context.lane_relationships
 
     if len(symbols) != len(labels):
         raise ValueError(
             "lane_symbols and lane_labels must have equal length"
         )
+
+    expected_relationships = len(symbols) - 1
+
+    if len(relationships) != expected_relationships:
+        raise ValueError(
+            "lane_relationships must contain exactly one relationship "
+            "for each transition between lane stages"
+        )
+
+    relationship_text = " ".join(
+        relationships
+    )
 
     count = len(symbols)
 
@@ -164,7 +173,7 @@ def plot_repository_lane(
         0.89,
         count,
     )
-    y = 0.54
+    y = 0.56
 
     box_width = min(
         0.17,
@@ -243,11 +252,11 @@ def plot_repository_lane(
 
     axis.text(
         0.5,
-        0.15,
-        context.lane_caption,
+        0.23,
+        relationship_text,
         ha="center",
         va="center",
-        fontsize=10.2,
+        fontsize=10.5,
         wrap=True,
     )
 
@@ -382,7 +391,7 @@ def plot_construction_sequence(
         context.repository_sequence_caption,
         ha="center",
         va="center",
-        fontsize=10.5,
+        fontsize=11.0,
     )
 
     return _save_figure(
