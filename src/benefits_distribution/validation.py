@@ -23,7 +23,6 @@ def validate_context(context: RepositoryContext) -> None:
         "repository_variable_title": (
             context.repository_variable_title
         ),
-        "lane_caption": context.lane_caption,
         "repository_sequence_title": (
             context.repository_sequence_title
         ),
@@ -53,6 +52,7 @@ def validate_context(context: RepositoryContext) -> None:
         "indicators": context.indicators,
         "lane_symbols": context.lane_symbols,
         "lane_labels": context.lane_labels,
+        "lane_relationships": context.lane_relationships,
         "construction_sequence": context.construction_sequence,
     }
 
@@ -83,13 +83,6 @@ def validate_context(context: RepositoryContext) -> None:
                 f"{name} contains an empty item"
             )
 
-    if len(context.grammar) != 6:
-        raise ContextValidationError(
-            "grammar must contain exactly six terms: "
-            "Constraint, Connected lane, Engineering object, "
-            "Engineering variable, Observable state, and Indicator"
-        )
-
     expected_grammar = (
         "Constraint",
         "Connected lane",
@@ -101,7 +94,9 @@ def validate_context(context: RepositoryContext) -> None:
 
     if context.grammar != expected_grammar:
         raise ContextValidationError(
-            "grammar must match the canonical specification grammar"
+            "grammar must match the canonical specification grammar: "
+            "Constraint, Connected lane, Engineering object, "
+            "Engineering variable, Observable state, Indicator"
         )
 
     if (
@@ -115,6 +110,21 @@ def validate_context(context: RepositoryContext) -> None:
     if len(context.lane_symbols) < 2:
         raise ContextValidationError(
             "repository lane must contain at least two stages"
+        )
+
+    expected_relationship_count = (
+        len(context.lane_symbols) - 1
+    )
+
+    if (
+        len(context.lane_relationships)
+        != expected_relationship_count
+    ):
+        raise ContextValidationError(
+            "lane_relationships must contain exactly one relationship "
+            "for each transition between lane stages: "
+            f"expected {expected_relationship_count}, "
+            f"received {len(context.lane_relationships)}"
         )
 
     if len(context.construction_sequence) < 2:
@@ -145,7 +155,7 @@ def validate_context(context: RepositoryContext) -> None:
 
         if not number.isdigit():
             raise ContextValidationError(
-                f"invalid notebook number in construction_sequence: "
+                "invalid notebook number in construction_sequence: "
                 f"{number!r}"
             )
 
